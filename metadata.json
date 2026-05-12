@@ -1,0 +1,7 @@
+{
+  "owner": "AnimMouse",
+  "name": "setup-ffmpeg",
+  "visibility": "internal",
+  "description": "Setup/Install FFmpeg for GitHub Actions",
+  "block_publish": false
+}

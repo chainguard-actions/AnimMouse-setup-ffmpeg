@@ -14,17 +14,17 @@ Action **AnimMouse--setup-ffmpeg/v1** was hardened automatically. 2 finding(s) w
 
 ### unpinned-uses (severity: high)
 
-Three `uses:` references in action.yaml are pinned to mutable tags instead of full 40-character commit SHAs, making the action vulnerable to supply-chain attacks if the referenced tags are moved or overwritten. Failing references: `actions/cache/restore@v4` (line 52), `AnimMouse/tool-cache@v1` (line 63), `actions/cache/save@v4` (line 69).
+Three `uses:` references in action.yaml are pinned to mutable version tags instead of immutable 40-character SHA digests. This exposes the action to supply-chain attacks if the referenced actions are compromised or their tags are moved. Failing references: `actions/cache/restore@v4`, `AnimMouse/tool-cache@v1`, `actions/cache/save@v4`.
 
 Locations:
 
 - `action.yaml:52`
-- `action.yaml:63`
-- `action.yaml:69`
+- `action.yaml:64`
+- `action.yaml:72`
 
 ### github-env-injection (severity: high)
 
-The attacker-controlled input `inputs.version` is passed via `env: version: ${{ inputs.version }}` into the shell scripts, where it is written directly to `$GITHUB_OUTPUT` without the required sanitization step (`printf '%s' ... | tr -d '\n\r'`). In `scripts/version/Unix-like.sh` (line 20), `echo "version=$version" >> $GITHUB_OUTPUT` writes the unsanitized value. In `scripts/version/Windows.ps1` (line 12), `Add-Content $env:GITHUB_OUTPUT version=$env:version` does the same. A malicious `inputs.version` value containing newlines could inject arbitrary key-value pairs into the GitHub Actions environment.
+The `inputs.version` value is assigned to the `version` environment variable (action.yaml lines 23 and 31) and then written directly to `$GITHUB_OUTPUT` in the version scripts without the required sanitization step (`printf '%s' ... | tr -d '\n\r'`). An attacker can supply a `version` input containing newline characters to inject arbitrary key=value pairs into `$GITHUB_OUTPUT`, potentially overwriting subsequent step outputs or poisoning the environment. Affected writes: `echo "version=$version" >> $GITHUB_OUTPUT` in Unix-like.sh and `Add-Content $env:GITHUB_OUTPUT version=$env:version` in Windows.ps1.
 
 Locations:
 
@@ -39,5 +39,5 @@ Locations:
 
 **Notes:**
 
-Fixed three unpinned uses references in action.yaml: actions/cache/restore@v4 → @0057852bfaa89a56745cba8c7296529d2fc39830, AnimMouse/tool-cache@v1 → @c58dc704bd326aa5d6f995afe80ac0486ec59c5e, actions/cache/save@v4 → @0057852bfaa89a56745cba8c7296529d2fc39830. Fixed github-env-injection in scripts/version/Unix-like.sh by sanitizing both the latest_release and user-supplied version values with `printf '%s' ... | tr -d '\n\r'` before writing to $GITHUB_OUTPUT. Fixed github-env-injection in scripts/version/Windows.ps1 by sanitizing both values with `-replace '[\r\n]', ''` before writing to $GITHUB_OUTPUT.
+Fixed three unpinned `uses:` references in action.yaml by pinning to full SHA digests: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830, AnimMouse/tool-cache@c58dc704bd326aa5d6f995afe80ac0486ec59c5e, actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830. Fixed github-env-injection in scripts/version/Unix-like.sh by using `printf '%s' ... | tr -d '\n\r'` to sanitize version values before writing to $GITHUB_OUTPUT. Fixed github-env-injection in scripts/version/Windows.ps1 by using `-replace '[\r\n]', ''` to sanitize version values before writing to $env:GITHUB_OUTPUT.
 

@@ -8,7 +8,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 
 | Version | Tag | Upstream commit |
 |---------|-----|-----------------|
-| v1 | [`v1`](https://github.com/chainguard-actions/AnimMouse-setup-ffmpeg/tree/v1) | — |
+| v1 | [`v1`](https://github.com/chainguard-actions/AnimMouse-setup-ffmpeg/tree/v1) | [`ae28d57`](https://github.com/AnimMouse/setup-ffmpeg/commit/ae28d57dabbb148eff63170b6bf7f2b60062cbae) |
 
 ## Privacy
 

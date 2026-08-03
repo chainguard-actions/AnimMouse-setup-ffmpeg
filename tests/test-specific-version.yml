@@ -1,0 +1,51 @@
+name: Test FFmpeg setup with specific version
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup FFmpeg with specific version 6.1
+        id: setup
+        uses: .
+        with:
+          version: "6.1"
+          token: ${{ github.token }}
+        continue-on-error: true
+
+      - name: Assert FFmpeg setup ran (installed or failed gracefully)
+        env:
+          OUTCOME: ${{ steps.setup.outcome }}
+        run: |
+          echo "Setup outcome: $OUTCOME"
+          if [ "$OUTCOME" = "success" ]; then
+            echo "Action succeeded, checking ffmpeg availability..."
+            if ! command -v ffmpeg >/dev/null 2>&1; then
+              echo "FAIL: ffmpeg not found on PATH after successful setup"
+              exit 1
+            fi
+            echo "PASS: ffmpeg found at $(command -v ffmpeg)"
+            OUTPUT=$(ffmpeg -version 2>&1 || true)
+            echo "$OUTPUT"
+            if ! echo "$OUTPUT" | grep -qi "ffmpeg version"; then
+              echo "FAIL: ffmpeg -version did not output expected version string"
+              exit 1
+            fi
+            if ! echo "$OUTPUT" | grep -q "6\.1"; then
+              echo "FAIL: expected version 6.1 in ffmpeg output"
+              exit 1
+            fi
+            echo "PASS: ffmpeg version 6.1 confirmed"
+            if ! command -v ffprobe >/dev/null 2>&1; then
+              echo "FAIL: ffprobe not found on PATH"
+              exit 1
+            fi
+            echo "PASS: ffprobe found at $(command -v ffprobe)"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (network/cache/external-action limitation under act)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi

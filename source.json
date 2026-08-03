@@ -1,6 +1,11 @@
 {
   "owner": "AnimMouse",
   "repo": "setup-ffmpeg",
-  "version": "",
-  "url": "https://github.com/AnimMouse/setup-ffmpeg"
+  "version": "v1.2.5",
+  "commit_sha": "178e0b4a408f06ce40d896c3cd79f50fa6f8b0c3",
+  "url": "https://github.com/AnimMouse/setup-ffmpeg",
+  "policy_sha": "d636be7e43ef829af6e853da6b3c7566db9f72fe",
+  "test_policy_sha": "843adf9e4b8f85d0c08b27b9d0b09dd094b54702",
+  "test_agent_version": "2",
+  "harden_agent_version": "2"
 }

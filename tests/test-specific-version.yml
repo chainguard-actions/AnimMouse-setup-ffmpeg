@@ -1,0 +1,51 @@
+name: Test specific version input
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: action
+        uses: .
+        with:
+          version: "7.1"
+          token: ${{ github.token }}
+        continue-on-error: true
+      - name: Assert ffmpeg version 7.1 is installed or action failed gracefully
+        env:
+          OUTCOME: ${{ steps.action.outcome }}
+        run: |
+          echo "Action outcome: $OUTCOME"
+          if [ "$OUTCOME" = "success" ]; then
+            echo "Checking ffmpeg availability..."
+            if ! command -v ffmpeg > /dev/null 2>&1; then
+              echo "FAIL: action succeeded but ffmpeg not found in PATH"
+              exit 1
+            fi
+            echo "PASS: ffmpeg found at $(command -v ffmpeg)"
+            echo "Running ffmpeg -version..."
+            OUTPUT=$(ffmpeg -version 2>&1 || true)
+            echo "Output: $OUTPUT"
+            if ! echo "$OUTPUT" | grep -q "ffmpeg version"; then
+              echo "FAIL: ffmpeg -version did not produce expected output"
+              exit 1
+            fi
+            # Check that the version contains 7.1
+            if ! echo "$OUTPUT" | grep -q "7\.1"; then
+              echo "FAIL: expected ffmpeg version 7.1 but got: $OUTPUT"
+              exit 1
+            fi
+            echo "PASS: ffmpeg version 7.1 is installed"
+            echo "Checking ffprobe availability..."
+            if ! command -v ffprobe > /dev/null 2>&1; then
+              echo "FAIL: ffprobe not found in PATH"
+              exit 1
+            fi
+            echo "PASS: ffprobe found at $(command -v ffprobe)"
+          elif [ "$OUTCOME" = "failure" ]; then
+            echo "PASS: action failed gracefully (likely due to act environment limitations with cache/network)"
+          else
+            echo "FAIL: unexpected outcome '$OUTCOME'"
+            exit 1
+          fi

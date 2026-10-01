@@ -31,7 +31,7 @@ then
   rm "FFmpeg.$ext" "FFprobe.$ext"
 else
   if [ "$RUNNER_ARCH" = ARM64 ]; then arch=arm64; else arch=64; fi
-  if [ "$version" = master ]; then filename="ffmpeg-master-latest-linux${arch}-gpl.tar.xz"; else filename="ffmpeg-n${version}-latest-linux${arch}-gpl-${version}.tar.xz"; fi
+  if [ "$version" = master ]; then filename=ffmpeg-master-latest-linux${arch}-gpl.tar.xz; else filename=ffmpeg-n${version}-latest-linux${arch}-gpl-${version}.tar.xz; fi
   wget -qO- "$GITHUB_SERVER_URL/BtbN/FFmpeg-Builds/releases/download/latest/$filename" | tar -xJC FFmpeg --strip-components 2 --no-anchored ffmpeg ffprobe
 fi
 echo ::endgroup::

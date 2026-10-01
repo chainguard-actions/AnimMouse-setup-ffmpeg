@@ -19,8 +19,8 @@ then
     latest_release=$latest_release_linux
   fi
   safe_version=$(printf '%s' "$latest_release" | tr -d '\n\r')
-  printf 'version=%s\n' "$safe_version" >> "$GITHUB_OUTPUT"
+  echo "version=$safe_version" >> "$GITHUB_OUTPUT"
 else
   safe_version=$(printf '%s' "$version" | tr -d '\n\r')
-  printf 'version=%s\n' "$safe_version" >> "$GITHUB_OUTPUT"
+  echo "version=$safe_version" >> "$GITHUB_OUTPUT"
 fi

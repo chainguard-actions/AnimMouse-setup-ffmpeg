@@ -2,9 +2,9 @@
 set -eu
 if [ "$version" = release ]
 then
-  if [ $RUNNER_OS = macOS ]
+  if [ "$RUNNER_OS" = macOS ]
   then
-    if [ $RUNNER_ARCH = ARM64 ]
+    if [ "$RUNNER_ARCH" = ARM64 ]
     then
       latest_release=$(curl -s https://www.osxexperts.net | grep -o 'https://www.osxexperts.net/ffmpeg[0-9.]*arm.zip' | awk -F 'ffmpeg|arm.zip' '{print $2}')
     else
@@ -12,15 +12,15 @@ then
     fi
   else
     latest_release_linux=$(gh api repos/BtbN/FFmpeg-Builds/releases/latest -q '[.assets[].name | capture("^ffmpeg-n(?<v>[0-9]+(?:\\.[0-9]+)+)-latest-") | .v] | unique | max_by(split(".") | map(tonumber))')
-    if [ -z $latest_release_linux ]
+    if [ -z "$latest_release_linux" ]
     then
       latest_release_linux=$(curl -s https://endoflife.date/api/ffmpeg.json | jq -r .[0].cycle)
     fi
     latest_release=$latest_release_linux
   fi
-  safe_version=$(printf '%s' "$latest_release" | tr -d '\n\r')
-  echo "version=$safe_version" >> "$GITHUB_OUTPUT"
+  safe=$(printf '%s' "$latest_release" | tr -d '\n\r')
+  echo "version=$safe" >> "$GITHUB_OUTPUT"
 else
-  safe_version=$(printf '%s' "$version" | tr -d '\n\r')
-  echo "version=$safe_version" >> "$GITHUB_OUTPUT"
+  safe=$(printf '%s' "$version" | tr -d '\n\r')
+  echo "version=$safe" >> "$GITHUB_OUTPUT"
 fi

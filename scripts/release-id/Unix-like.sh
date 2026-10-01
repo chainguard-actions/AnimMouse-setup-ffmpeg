@@ -1,8 +1,8 @@
 #!/bin/sh
 set -eu
-if [ $RUNNER_OS = macOS ]
+if [ "$RUNNER_OS" = macOS ]
 then
-  if [ $RUNNER_ARCH = ARM64 ]
+  if [ "$RUNNER_ARCH" = ARM64 ]
   then
     release_id=static
   else
@@ -16,5 +16,5 @@ then
 else
   release_id=$(gh api repos/BtbN/FFmpeg-Builds/releases/latest -q .id)
 fi
-safe_release_id=$(printf '%s' "$release_id" | tr -d '\n\r')
-echo "release_id=$safe_release_id" >> "$GITHUB_OUTPUT"
+safe=$(printf '%s' "$release_id" | tr -d '\n\r')
+echo "release_id=$safe" >> "$GITHUB_OUTPUT"

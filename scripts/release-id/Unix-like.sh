@@ -16,5 +16,5 @@ then
 else
   release_id=$(gh api repos/BtbN/FFmpeg-Builds/releases/latest -q .id)
 fi
-printf '%s' "release_id=$release_id" | tr -d '\n\r' >> "$GITHUB_OUTPUT"
-echo >> "$GITHUB_OUTPUT"
+safe=$(printf '%s' "$release_id" | tr -d '\n\r')
+echo "release_id=$safe" >> "$GITHUB_OUTPUT"

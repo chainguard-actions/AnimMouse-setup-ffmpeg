@@ -1,6 +1,6 @@
 #!/bin/sh
 set -eu
-echo ::group::Downloading FFmpeg "$version" for "$RUNNER_OS" "$RUNNER_ARCH"
+echo ::group::Downloading FFmpeg "$version" for $RUNNER_OS $RUNNER_ARCH
 mkdir FFmpeg
 if [ "$RUNNER_OS" = macOS ]
 then
@@ -26,12 +26,12 @@ then
       wget -qO FFprobe.7z "https://evermeet.cx/ffprobe/ffprobe-$version.7z"
     fi
   fi
-  7z e "FFmpeg.$ext" ffmpeg -oFFmpeg
-  7z e "FFprobe.$ext" ffprobe -oFFmpeg
-  rm "FFmpeg.$ext" "FFprobe.$ext"
+  7z e FFmpeg.$ext ffmpeg -oFFmpeg
+  7z e FFprobe.$ext ffprobe -oFFmpeg
+  rm FFmpeg.$ext FFprobe.$ext
 else
   if [ "$RUNNER_ARCH" = ARM64 ]; then arch=arm64; else arch=64; fi
-  if [ "$version" = master ]; then filename=ffmpeg-master-latest-linux${arch}-gpl.tar.xz; else filename=ffmpeg-n${version}-latest-linux${arch}-gpl-${version}.tar.xz; fi
+  if [ "$version" = master ]; then filename=ffmpeg-master-latest-linux$arch-gpl.tar.xz; else filename=ffmpeg-n$version-latest-linux$arch-gpl-$version.tar.xz; fi
   wget -qO- "$GITHUB_SERVER_URL/BtbN/FFmpeg-Builds/releases/download/latest/$filename" | tar -xJC FFmpeg --strip-components 2 --no-anchored ffmpeg ffprobe
 fi
 echo ::endgroup::

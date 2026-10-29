@@ -63,7 +63,7 @@ runs:
         GITHUB_TOKEN: ${{ inputs.token }}
     - name: Restore FFmpeg cache
       id: cache
-      uses: chainguard-actions/actions-cache/restore@dc4b8a9beaba8dd7fead89b3b3df02fb4bc6336a # v5
+      uses: chainguard-actions/actions-cache/restore@2d1e8143d682aedf4ca5ea1721581d0ce7952a98 # v5
       with:
         path: ${{ runner.tool_cache }}/FFmpeg
         key: FFmpeg-${{ steps.version-unix-like.outputs.version || steps.version-windows.outputs.version }}-${{ steps.release-id-unix-like.outputs.release_id || steps.release-id-windows.outputs.release_id }}-${{ runner.os }}-${{ runner.arch }}
@@ -88,7 +88,7 @@ runs:
         cache_hit: ${{ steps.cache.outputs.cache-hit }}
     - name: Save FFmpeg cache
       if: '! steps.cache.outputs.cache-hit'
-      uses: chainguard-actions/actions-cache/save@dc4b8a9beaba8dd7fead89b3b3df02fb4bc6336a # v5
+      uses: chainguard-actions/actions-cache/save@2d1e8143d682aedf4ca5ea1721581d0ce7952a98 # v5
       with:
         path: ${{ runner.tool_cache }}/FFmpeg
         key: FFmpeg-${{ steps.version-unix-like.outputs.version || steps.version-windows.outputs.version }}-${{ steps.release-id-unix-like.outputs.release_id || steps.release-id-windows.outputs.release_id }}-${{ runner.os }}-${{ runner.arch }}

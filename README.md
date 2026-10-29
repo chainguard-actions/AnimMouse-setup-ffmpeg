@@ -6,10 +6,10 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 
 ## Versions
 
-| Version | Tag | Upstream commit |
-|---------|-----|-----------------|
-| v1 | [`v1`](https://github.com/chainguard-actions/AnimMouse-setup-ffmpeg/tree/v1) | [`178e0b4`](https://github.com/AnimMouse/setup-ffmpeg/commit/178e0b4a408f06ce40d896c3cd79f50fa6f8b0c3) |
-| v1.2.5 | [`v1.2.5`](https://github.com/chainguard-actions/AnimMouse-setup-ffmpeg/tree/v1.2.5) | [`178e0b4`](https://github.com/AnimMouse/setup-ffmpeg/commit/178e0b4a408f06ce40d896c3cd79f50fa6f8b0c3) |
+| Version | Tag | Upstream commit | Hardening report |
+|---------|-----|-----------------|------------------|
+| v1 | [`v1`](https://github.com/chainguard-actions/AnimMouse-setup-ffmpeg/tree/v1) | [`178e0b4`](https://github.com/AnimMouse/setup-ffmpeg/commit/178e0b4a408f06ce40d896c3cd79f50fa6f8b0c3) | [`HARDENING.md`](https://github.com/chainguard-actions/AnimMouse-setup-ffmpeg/blob/v1/HARDENING.md) |
+| v1.2.5 | [`v1.2.5`](https://github.com/chainguard-actions/AnimMouse-setup-ffmpeg/tree/v1.2.5) | [`178e0b4`](https://github.com/AnimMouse/setup-ffmpeg/commit/178e0b4a408f06ce40d896c3cd79f50fa6f8b0c3) | [`HARDENING.md`](https://github.com/chainguard-actions/AnimMouse-setup-ffmpeg/blob/v1.2.5/HARDENING.md) |
 
 ## Privacy
 

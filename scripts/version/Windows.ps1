@@ -5,10 +5,10 @@ if ($env:version -eq 'release') {
   if (-not $latest_release) {
     $latest_release = (Invoke-RestMethod https://endoflife.date/api/ffmpeg.json)[0].cycle
   }
-  $safe = ($latest_release -replace '[\r\n]', '')
+  $safe = ("$latest_release" -replace '[\r\n]', '')
   Add-Content $env:GITHUB_OUTPUT "version=$safe"
 }
 else {
-  $safe = ($env:version -replace '[\r\n]', '')
+  $safe = ("$env:version" -replace '[\r\n]', '')
   Add-Content $env:GITHUB_OUTPUT "version=$safe"
 }

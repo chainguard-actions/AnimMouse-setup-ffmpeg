@@ -10,6 +10,7 @@ inputs:
   token:
     description: GitHub token to avoid API rate limiting
     default: ${{ github.token }}
+    
 runs:
   using: composite
   steps:
@@ -38,6 +39,7 @@ runs:
       env:
         version: ${{ inputs.version }}
         GITHUB_TOKEN: ${{ inputs.token }}
+        
     - name: Get FFmpeg version for Windows
       id: version-windows
       if: runner.os == 'Windows'
@@ -46,6 +48,7 @@ runs:
       env:
         version: ${{ inputs.version }}
         GITHUB_TOKEN: ${{ inputs.token }}
+        
     - name: Get FFmpeg release ID for Unix-like
       id: release-id-unix-like
       if: runner.os == 'Linux' || runner.os == 'macOS'
@@ -54,6 +57,7 @@ runs:
       env:
         version: ${{ steps.version-unix-like.outputs.version }}
         GITHUB_TOKEN: ${{ inputs.token }}
+        
     - name: Get FFmpeg release ID for Windows
       id: release-id-windows
       if: runner.os == 'Windows'
@@ -61,12 +65,14 @@ runs:
       run: '& $env:GITHUB_ACTION_PATH\scripts\release-id\Windows.ps1'
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
+        
     - name: Restore FFmpeg cache
       id: cache
       uses: chainguard-actions/actions-cache/restore@2d1e8143d682aedf4ca5ea1721581d0ce7952a98 # v5
       with:
         path: ${{ runner.tool_cache }}/FFmpeg
         key: FFmpeg-${{ steps.version-unix-like.outputs.version || steps.version-windows.outputs.version }}-${{ steps.release-id-unix-like.outputs.release_id || steps.release-id-windows.outputs.release_id }}-${{ runner.os }}-${{ runner.arch }}
+        
     - name: Download FFmpeg for Unix-like
       if: (runner.os == 'Linux' || runner.os == 'macOS') && ! steps.cache.outputs.cache-hit
       shell: bash
@@ -74,6 +80,7 @@ runs:
       run: $GITHUB_ACTION_PATH/scripts/download/Unix-like.sh
       env:
         version: ${{ steps.version-unix-like.outputs.version }}
+        
     - name: Download FFmpeg for Windows
       if: runner.os == 'Windows' && ! steps.cache.outputs.cache-hit
       shell: pwsh
@@ -81,11 +88,13 @@ runs:
       run: '& $env:GITHUB_ACTION_PATH\scripts\download\Windows.ps1'
       env:
         version: ${{ steps.version-windows.outputs.version }}
+        
     - name: Install FFmpeg on tool cache
       uses: chainguard-actions/animmouse-tool-cache@7c482bcefde5564e095a64b26a629c3df916ad15 # v1
       with:
         folder_name: FFmpeg
         cache_hit: ${{ steps.cache.outputs.cache-hit }}
+        
     - name: Save FFmpeg cache
       if: '! steps.cache.outputs.cache-hit'
       uses: chainguard-actions/actions-cache/save@2d1e8143d682aedf4ca5ea1721581d0ce7952a98 # v5

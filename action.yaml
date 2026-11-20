@@ -34,7 +34,7 @@ runs:
       id: version-unix-like
       if: runner.os == 'Linux' || runner.os == 'macOS'
       shell: bash
-      run: $GITHUB_ACTION_PATH/scripts/version/Unix-like.sh
+      run: '"$GITHUB_ACTION_PATH/scripts/version/Unix-like.sh"'
       env:
         version: ${{ inputs.version }}
         GITHUB_TOKEN: ${{ inputs.token }}
@@ -42,7 +42,7 @@ runs:
       id: version-windows
       if: runner.os == 'Windows'
       shell: pwsh
-      run: '& $env:GITHUB_ACTION_PATH\scripts\version\Windows.ps1'
+      run: '& "$env:GITHUB_ACTION_PATH\scripts\version\Windows.ps1"'
       env:
         version: ${{ inputs.version }}
         GITHUB_TOKEN: ${{ inputs.token }}
@@ -50,7 +50,7 @@ runs:
       id: release-id-unix-like
       if: runner.os == 'Linux' || runner.os == 'macOS'
       shell: bash
-      run: $GITHUB_ACTION_PATH/scripts/release-id/Unix-like.sh
+      run: '"$GITHUB_ACTION_PATH/scripts/release-id/Unix-like.sh"'
       env:
         version: ${{ steps.version-unix-like.outputs.version }}
         GITHUB_TOKEN: ${{ inputs.token }}
@@ -58,7 +58,7 @@ runs:
       id: release-id-windows
       if: runner.os == 'Windows'
       shell: pwsh
-      run: '& $env:GITHUB_ACTION_PATH\scripts\release-id\Windows.ps1'
+      run: '& "$env:GITHUB_ACTION_PATH\scripts\release-id\Windows.ps1"'
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
     - name: Restore FFmpeg cache
@@ -71,14 +71,14 @@ runs:
       if: (runner.os == 'Linux' || runner.os == 'macOS') && ! steps.cache.outputs.cache-hit
       shell: bash
       working-directory: ${{ runner.temp }}
-      run: $GITHUB_ACTION_PATH/scripts/download/Unix-like.sh
+      run: '"$GITHUB_ACTION_PATH/scripts/download/Unix-like.sh"'
       env:
         version: ${{ steps.version-unix-like.outputs.version }}
     - name: Download FFmpeg for Windows
       if: runner.os == 'Windows' && ! steps.cache.outputs.cache-hit
       shell: pwsh
       working-directory: ${{ runner.temp }}
-      run: '& $env:GITHUB_ACTION_PATH\scripts\download\Windows.ps1'
+      run: '& "$env:GITHUB_ACTION_PATH\scripts\download\Windows.ps1"'
       env:
         version: ${{ steps.version-windows.outputs.version }}
     - name: Install FFmpeg on tool cache
